@@ -1,5 +1,8 @@
 # Syslog Priority Converter
 
+[![Perform Python Linter Run](https://github.com/Cthullu/syslog_priority_converter/actions/workflows/python_lint.yml/badge.svg?branch=main)](https://github.com/Cthullu/syslog_priority_converter/actions/workflows/python_lint.yml)
+[![.github/workflows/markdown_linter.yml](https://github.com/Cthullu/syslog_priority_converter/actions/workflows/markdown_linter.yml/badge.svg?branch=main)](https://github.com/Cthullu/syslog_priority_converter/actions/workflows/markdown_linter.yml)
+
 I occassionaly work with syslog message processing and always find myself
 struggling with converting the syslog `priority` back to `facility` and
 `severity` values.
