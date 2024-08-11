@@ -10,9 +10,10 @@ on:
 
 jobs:
   build:
-    - uses: actions/checkout@master
+    steps:
+      - uses: actions/checkout@master
 
-    - name: Run markdown-lint
-      uses: articulate/actions-markdownlint@v1.1.0
-      with:
-        files: README.md
+      - name: Run markdown-lint
+        uses: articulate/actions-markdownlint@v1.1.0
+        with:
+          files: README.md
