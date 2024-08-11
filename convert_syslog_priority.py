@@ -65,7 +65,8 @@ def extract_values(priority: int, logger: logging = None) -> dict:
     ret_val["failicty_keyword"] = const.FACILITY_KEYWORDS[ret_val["facility_value"]]
 
     logger.debug("Get severity level from provided priority '%s'.", priority)
-    ret_val["severity_value"] = priority - (ret_val["facility_value"] * const.PRIORITY_CONVERSION_FACTOR)
+    ret_val["severity_value"] = priority - (ret_val["facility_value"]
+                                            * const.PRIORITY_CONVERSION_FACTOR)
 
     logger.debug("Get severity keyword for value '%s'.",ret_val["severity_value"])
     ret_val["severity_keyword"] = const.SEVERITY_KEYWORDS[ret_val["severity_value"]]
@@ -102,8 +103,10 @@ def main() -> int:
     logger.debug("Call subfunction to extract values from priority.")
     extracted_values = extract_values(cli_args.priority, logger)
 
-    print(f"Facility: {extracted_values['facility_value']} ({extracted_values['failicty_keyword']})")
-    print(f"Severity: {extracted_values['severity_value']} ({extracted_values['severity_keyword']})")
+    print(f"Facility: {extracted_values['facility_value']} "
+          f"({extracted_values['failicty_keyword']})")
+    print(f"Severity: {extracted_values['severity_value']} "
+          f"({extracted_values['severity_keyword']})")
 
     return 0
 
