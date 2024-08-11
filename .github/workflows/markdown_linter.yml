@@ -14,7 +14,11 @@ jobs:
     steps:
       - uses: actions/checkout@master
 
+      - name: Print list of files to perform linter run at
+        run: |
+          echo "$(git ls-files '*.md')"
+
       - name: Run markdown-lint
         uses: articulate/actions-markdownlint@v1.1.0
         with:
-          files: README.md
+          files: $(git ls-files '*.md')
