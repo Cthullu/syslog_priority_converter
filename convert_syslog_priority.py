@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Check systemd services and timers.
+Convert given syslog priority value into facility and severity values.
 """
 
 __author__: str = "Daniel Kuß"
