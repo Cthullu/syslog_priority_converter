@@ -16,7 +16,7 @@ import constant as const
 
 def get_parser(version: str) -> argparse.ArgumentParser:
     """
-    Returns an ArgumentParser for the check_systemd.py script.
+    Returns an ArgumentParser for the convert_syslog_priority.py script.
 
     :return: ArgumentParser
     """
