@@ -9,10 +9,12 @@ __version__: str = "1.0.0"
 __src__: str = "https://github.com/Cthullu/syslog_priority_converter"
 __status__: str = "Production"
 
+
 import logging
-import sys
 import argparse
 import constant as const
+from sys import exit as sys_exit
+
 
 def get_parser(version: str) -> argparse.ArgumentParser:
     """
@@ -112,4 +114,4 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    sys_exit(main())
