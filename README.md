@@ -1,6 +1,7 @@
 # Syslog Priority Converter
 
 [![Perform Python Linter Run](https://github.com/Cthullu/syslog_priority_converter/actions/workflows/python_lint.yml/badge.svg?branch=main)](https://github.com/Cthullu/syslog_priority_converter/actions/workflows/python_lint.yml)
+[![Perform Python Unittests](https://github.com/Cthullu/syslog_priority_converter/actions/workflows/unittests.yml/badge.svg?branch=main)](https://github.com/Cthullu/syslog_priority_converter/actions/workflows/unittests.yml)
 [![.github/workflows/markdown_linter.yml](https://github.com/Cthullu/syslog_priority_converter/actions/workflows/markdown_linter.yml/badge.svg?branch=main)](https://github.com/Cthullu/syslog_priority_converter/actions/workflows/markdown_linter.yml)
 [![CodeQL](https://github.com/Cthullu/syslog_priority_converter/actions/workflows/github-code-scanning/codeql/badge.svg?branch=main)](https://github.com/Cthullu/syslog_priority_converter/actions/workflows/github-code-scanning/codeql)
 
