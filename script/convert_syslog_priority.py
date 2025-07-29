@@ -5,7 +5,7 @@ Convert given syslog priority value into facility and severity values.
 """
 
 __author__: str = "Daniel Kuß"
-__version__: str = "1.0.0"
+__version__: str = "1.1.0"
 __src__: str = "https://github.com/Cthullu/syslog_priority_converter"
 __status__: str = "Production"
 
@@ -14,17 +14,20 @@ import logging
 import argparse
 
 from sys import exit as sys_exit
-from syslog_converter import PRIORITY_CONVERSION_FACTOR
-from syslog_converter import FACILITY_KEYWORDS
-from syslog_converter import SEVERITY_KEYWORDS
 from typing import Optional
 
+import syslog_converter
 
-def get_parser(version: str) -> argparse.ArgumentParser:
+
+def get_parser() -> argparse.ArgumentParser:
     """
     Returns an ArgumentParser for the convert_syslog_priority.py script.
 
-    :return: ArgumentParser
+    Args:
+        None
+
+    Returns:
+        argparse.ArgumentParser: Configured argument parser.
     """
     parser = argparse.ArgumentParser(
         prog = "convert_syslog_priority",
@@ -42,7 +45,7 @@ def get_parser(version: str) -> argparse.ArgumentParser:
     parser.add_argument(
         "-v", "--version",
         action = "version",
-        version = f'%(prog)s {version}'
+        version = f'%(prog)s {__version__}'
     )
 
     parser.add_argument(
@@ -52,7 +55,7 @@ def get_parser(version: str) -> argparse.ArgumentParser:
         help = "Priority to convert into facility and severity level.",
     )
 
-    return parser
+    return parser.parse_args()
 
 
 def extract_values(priority: int, logger: Optional[logging.Logger] = None) -> dict:
@@ -64,18 +67,24 @@ def extract_values(priority: int, logger: Optional[logging.Logger] = None) -> di
     """
     ret_val = {}
 
-    logger.debug("Perform integer division for '%s'.", priority)
-    ret_val["facility_value"] = priority // PRIORITY_CONVERSION_FACTOR
+    logger.debug("Get facility value from provided priority '%s'.", priority)
+    try:
+        ret_val["facility_value"] = syslog_converter.get_facility_value(priority)
+    except TypeError as exc:
+        logger.error("Invalid type for priority value: %s", exc)
+        raise TypeError("Priority must be an integer.") from exc
+    except ValueError as exc:
+        logger.error("Invalid priority value: %s", exc)
+        raise ValueError("Priority must be between 0 and 191 inclusive.") from exc
 
     logger.debug("Get facility keyword for value '%s'.",ret_val["facility_value"])
-    ret_val["failicty_keyword"] = FACILITY_KEYWORDS[ret_val["facility_value"]]
+    ret_val["failicty_keyword"] = syslog_converter.get_facility_keyword(ret_val["facility_value"])
 
     logger.debug("Get severity level from provided priority '%s'.", priority)
-    ret_val["severity_value"] = priority - (ret_val["facility_value"]
-                                            * PRIORITY_CONVERSION_FACTOR)
+    ret_val["severity_value"] = syslog_converter.get_severity_value(priority)
 
     logger.debug("Get severity keyword for value '%s'.",ret_val["severity_value"])
-    ret_val["severity_keyword"] = SEVERITY_KEYWORDS[ret_val["severity_value"]]
+    ret_val["severity_keyword"] = syslog_converter.get_severity_keyword(ret_val["severity_value"])
 
     return ret_val
 
@@ -84,7 +93,11 @@ def main() -> int:
     """
     Main function.
 
-    :return: int
+    Args:
+        None
+
+    Returns:
+        int: Exit code, 0 on success, 1 on error.
     """
     logging.basicConfig(
         level=logging.INFO,
@@ -93,7 +106,7 @@ def main() -> int:
     logger = logging.getLogger(__name__)
 
     logger.debug("PArsing command line arguments.")
-    cli_args = get_parser(__version__).parse_args()
+    cli_args = get_parser()
 
     if cli_args.debug:
         logger.setLevel(level=logging.DEBUG)
