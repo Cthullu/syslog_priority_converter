@@ -10,14 +10,24 @@ __src__: str = "https://github.com/Cthullu/syslog_priority_converter"
 __status__: str = "Production"
 
 
-import logging
 import argparse
 
+from loguru import logger
 from sys import exit as sys_exit
 from typing import Optional
 
 import syslog_converter
 
+
+LOGLEVELS = [
+    "TRACE",
+    "DEBUG",
+    "INFO",
+    "SUCCESS",
+    "WARNING",
+    "ERROR",
+    "CRITICAL",
+]
 
 def get_parser() -> argparse.ArgumentParser:
     """
@@ -35,11 +45,14 @@ def get_parser() -> argparse.ArgumentParser:
     )
 
     parser.add_argument(
-        "-d", "--debug",
-        dest = "debug",
-        help = "turn on debug logging",
-        action = "store_true",
-        default = False,
+        "-l", "--loglevel",
+        choices = LOGLEVELS,
+        default = "SUCCESS",
+        dest = "loglevel",
+        help = "Select logging level.",
+        metavar = "<loglevel>",
+        required = False,
+        type = str.upper,
     )
 
     parser.add_argument(
@@ -58,14 +71,34 @@ def get_parser() -> argparse.ArgumentParser:
     return parser.parse_args()
 
 
-def extract_values(priority: int, logger: Optional[logging.Logger] = None) -> dict:
+def setup_logger(level: str) -> logger:
+    """
+    Setup the logger configuration based on the debug flag.
+
+    Args:
+        debug (bool): If True, set logger to debug level, otherwise to info level.
+
+    Returns:
+        loguru.logger: Configured logger instance.
+    """
+    logger.remove()
+    logger.add(
+        level = f"{level.upper()}",
+        format = "{time:MMMM D, YYYY > HH:mm:ss} | {level} | {message}",
+        colorize = True
+    )
+
+    return logger
+
+
+def extract_values(priority: int, logger: Optional[logger] = None) -> dict:
     """
     Extract the facility and severity value from a provided priority.
     Also adds the facility and severity name.
 
     Args:
         priority (int): Syslog priority value.
-        logger (Optional[logging.Logger]): Logger instance for logging debug messages.
+        logger (Optional[loguru.logger]): Logger instance for logging debug messages.
 
     Returns:
         dict: Dictionary containing facility value, facility keyword, severity value,
@@ -136,25 +169,12 @@ def main() -> int:
     Returns:
         int: Exit code, 0 on success, 1 on error.
     """
-    logging.basicConfig(
-        level=logging.INFO,
-        format="%(asctime)s [%(levelname) -8s] (%(filename)s:%(lineno)d) %(message)s",
-    )
-    logger = logging.getLogger(__name__)
+    logger = setup_logger("SUCCESS")
 
-    logger.debug("PArsing command line arguments.")
+    logger.info("Starting syslog priority conversion script.")
+
     cli_args = get_parser()
-
-    if cli_args.debug:
-        logger.setLevel(level=logging.DEBUG)
-        logger.debug("Debug logging enabled.")
-    else:
-        logging.basicConfig(level=logging.INFO)
-
-    logger.debug("Check if provided priority value '%s' is valid.", cli_args.priority)
-    if cli_args.priority < 0 or cli_args.priority > 191:
-        print(f"Value '{cli_args.priority}' is not a valid priority.")
-        return 1
+    logger = setup_logger(cli_args.loglevel)
 
     logger.debug("Call subfunction to extract values from priority.")
     try:
@@ -169,6 +189,8 @@ def main() -> int:
     print(f"Severity: {extracted_values['severity_value']} "
           f"({extracted_values['severity_keyword']})")
 
+    logger.info("Syslog priority conversion completed successfully.")
+    logger.debug("Exiting with code 0.")
     return 0
 
 
