@@ -63,7 +63,13 @@ def extract_values(priority: int, logger: Optional[logging.Logger] = None) -> di
     Extract the facility and severity value from a provided priority.
     Also adds the facility and severity name.
 
-    :return: dict
+    Args:
+        priority (int): Syslog priority value.
+        logger (Optional[logging.Logger]): Logger instance for logging debug messages.
+
+    Returns:
+        dict: Dictionary containing facility value, facility keyword, severity value,
+            and severity keyword.
     """
     ret_val = {}
 
@@ -78,13 +84,44 @@ def extract_values(priority: int, logger: Optional[logging.Logger] = None) -> di
         raise ValueError("Priority must be between 0 and 191 inclusive.") from exc
 
     logger.debug("Get facility keyword for value '%s'.",ret_val["facility_value"])
-    ret_val["failicty_keyword"] = syslog_converter.get_facility_keyword(ret_val["facility_value"])
+    try:
+        ret_val["failicty_keyword"] = syslog_converter.get_facility_keyword(
+            ret_val["facility_value"]
+        )
+    except KeyError as exc:
+        logger.error("Invalid facility value: %s", exc)
+        raise KeyError("Facility must be between 0 and 23 inclusive.") from exc
+    except TypeError as exc:
+        logger.error("Invalid type for facility value: %s", exc)
+        raise TypeError("Facility must be an integer.") from exc
 
     logger.debug("Get severity level from provided priority '%s'.", priority)
-    ret_val["severity_value"] = syslog_converter.get_severity_value(priority)
+    try:
+        ret_val["severity_value"] = syslog_converter.get_severity_value(priority)
+    except TypeError as exc:
+        logger.error("Invalid type for priority value: %s", exc)
+        raise TypeError("Priority must be an integer.") from exc
+
+    try:
+        ret_val["severity_value"] = syslog_converter.get_severity_value(priority)
+    except ValueError as exc:
+        logger.error("Invalid priority value: %s", exc)
+        raise ValueError("Priority must be between 0 and 191 inclusive.") from exc
+    except TypeError as exc:
+        logger.error("Invalid type for priority value: %s", exc)
+        raise TypeError("Priority must be an integer.") from exc
 
     logger.debug("Get severity keyword for value '%s'.",ret_val["severity_value"])
-    ret_val["severity_keyword"] = syslog_converter.get_severity_keyword(ret_val["severity_value"])
+    try:
+        ret_val["severity_keyword"] = syslog_converter.get_severity_keyword(
+            ret_val["severity_value"]
+        )
+    except KeyError as exc:
+        logger.error("Invalid severity value: %s", exc)
+        raise KeyError("Severity must be between 0 and 7 inclusive.") from exc
+    except TypeError as exc:
+        logger.error("Invalid type for severity value: %s", exc)
+        raise TypeError("Severity must be an integer.") from exc
 
     return ret_val
 
@@ -120,7 +157,12 @@ def main() -> int:
         return 1
 
     logger.debug("Call subfunction to extract values from priority.")
-    extracted_values = extract_values(cli_args.priority, logger)
+    try:
+        extracted_values = extract_values(cli_args.priority, logger)
+    except (TypeError, ValueError, KeyError) as exc:
+        logger.error("Error extracting values: %s", exc)
+        print(f"Error: {exc}")
+        return 1
 
     print(f"Facility: {extracted_values['facility_value']} "
           f"({extracted_values['failicty_keyword']})")
