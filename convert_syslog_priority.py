@@ -10,24 +10,26 @@ __src__: str = "https://github.com/Cthullu/syslog_priority_converter"
 __status__: str = "Production"
 
 
+# Standard imports
 import argparse
-
-from loguru import logger
+import logging
 from sys import exit as sys_exit
 from typing import Optional
 
-import syslog_converter
+# Local imports
+from syslog_converter import facility
+from syslog_converter import severity
 
 
-LOGLEVELS = [
-    "TRACE",
-    "DEBUG",
-    "INFO",
-    "SUCCESS",
-    "WARNING",
-    "ERROR",
-    "CRITICAL",
-]
+LOGLEVELS = {
+    'CRITICAL': logging.CRITICAL,
+    'ERROR': logging.ERROR,
+    'WARNING': logging.WARNING,
+    'INFO': logging.INFO,
+    'DEBUG': logging.DEBUG,
+    'NOTSET': logging.NOTSET
+}
+
 
 def get_parser() -> argparse.ArgumentParser:
     """
@@ -47,7 +49,7 @@ def get_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "-l", "--loglevel",
         choices = LOGLEVELS,
-        default = "SUCCESS",
+        default = "WARNING",
         dest = "loglevel",
         help = "Select logging level.",
         metavar = "<loglevel>",
@@ -71,34 +73,37 @@ def get_parser() -> argparse.ArgumentParser:
     return parser.parse_args()
 
 
-def setup_logger(level: str) -> logger:
+def setup_logger(loglevel: Optional[int] = LOGLEVELS["WARNING"]) -> logging.Logger:
     """
-    Setup the logger configuration based on the debug flag.
+    Set up the logging configuration for the script.
 
     Args:
-        debug (bool): If True, set logger to debug level, otherwise to info level.
+        loglevel (Optional[int]): The logging level to set. Defaults to WARNING.
 
     Returns:
-        loguru.logger: Configured logger instance.
+        logging.Logger: Configured logger instance.
     """
-    logger.remove()
-    logger.add(
-        level = f"{level.upper()}",
-        format = "{time:MMMM D, YYYY > HH:mm:ss} | {level} | {message}",
-        colorize = True
-    )
+    logger = logging.getLogger()
+    logger.setLevel(loglevel)
+
+    # Create a console handler with the specified log level
+    console_handler = logging.StreamHandler()
+    console_handler.setLevel(loglevel)
+    formatter = logging.Formatter('%(asctime)s - %(levelname) -8s - %(message)s')
+    console_handler.setFormatter(formatter)
+    logger.addHandler(console_handler)
 
     return logger
 
 
-def extract_values(priority: int, logger: Optional[logger] = None) -> dict:
+def extract_values(priority: int, logger: Optional[logging.Logger] = None) -> dict:
     """
     Extract the facility and severity value from a provided priority.
     Also adds the facility and severity name.
 
     Args:
         priority (int): Syslog priority value.
-        logger (Optional[loguru.logger]): Logger instance for logging debug messages.
+        logger (Optional[Logging.logger]): Logger instance for logging debug messages.
 
     Returns:
         dict: Dictionary containing facility value, facility keyword, severity value,
@@ -108,7 +113,7 @@ def extract_values(priority: int, logger: Optional[logger] = None) -> dict:
 
     logger.debug("Get facility value from provided priority '%s'.", priority)
     try:
-        ret_val["facility_value"] = syslog_converter.get_facility_value(priority)
+        ret_val["facility_value"] = facility.get_facility_value(priority)
     except TypeError as exc:
         logger.error("Invalid type for priority value: %s", exc)
         raise TypeError("Priority must be an integer.") from exc
@@ -118,7 +123,7 @@ def extract_values(priority: int, logger: Optional[logger] = None) -> dict:
 
     logger.debug("Get facility keyword for value '%s'.",ret_val["facility_value"])
     try:
-        ret_val["failicty_keyword"] = syslog_converter.get_facility_keyword(
+        ret_val["failicty_keyword"] = facility.get_facility_keyword(
             ret_val["facility_value"]
         )
     except KeyError as exc:
@@ -130,23 +135,17 @@ def extract_values(priority: int, logger: Optional[logger] = None) -> dict:
 
     logger.debug("Get severity level from provided priority '%s'.", priority)
     try:
-        ret_val["severity_value"] = syslog_converter.get_severity_value(priority)
+        ret_val["severity_value"] = severity.get_severity_value(priority)
     except TypeError as exc:
         logger.error("Invalid type for priority value: %s", exc)
         raise TypeError("Priority must be an integer.") from exc
-
-    try:
-        ret_val["severity_value"] = syslog_converter.get_severity_value(priority)
     except ValueError as exc:
         logger.error("Invalid priority value: %s", exc)
         raise ValueError("Priority must be between 0 and 191 inclusive.") from exc
-    except TypeError as exc:
-        logger.error("Invalid type for priority value: %s", exc)
-        raise TypeError("Priority must be an integer.") from exc
 
-    logger.debug("Get severity keyword for value '%s'.",ret_val["severity_value"])
+    logger.debug("Get severity keyword for value '%s'.", ret_val["severity_value"])
     try:
-        ret_val["severity_keyword"] = syslog_converter.get_severity_keyword(
+        ret_val["severity_keyword"] = severity.get_severity_keyword(
             ret_val["severity_value"]
         )
     except KeyError as exc:
@@ -169,12 +168,13 @@ def main() -> int:
     Returns:
         int: Exit code, 0 on success, 1 on error.
     """
-    logger = setup_logger("SUCCESS")
+    logger = setup_logger("INFO")
 
     logger.info("Starting syslog priority conversion script.")
 
     cli_args = get_parser()
-    logger = setup_logger(cli_args.loglevel)
+    if cli_args.loglevel != "INFO":
+        logger = setup_logger(cli_args.loglevel)
 
     logger.debug("Call subfunction to extract values from priority.")
     try:
