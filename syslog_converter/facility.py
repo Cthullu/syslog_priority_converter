@@ -32,7 +32,7 @@ def get_facility_value(priority: int) -> int:
     return priority // PRIORITY_CONVERSION_FACTOR
 
 
-def get_failicty_keyword(facility: int) -> str:
+def get_facility_keyword(facility: int) -> str:
     """
     Get the facility keyword from a provided facility value.
 
