@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Perform operations related to syslog facilities.
+Perform unittests related to syslog facilities.
 """
 
 import unittest
