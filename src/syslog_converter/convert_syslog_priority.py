@@ -17,6 +17,7 @@ from sys import exit as sys_exit
 from syslog_converter import PRIORITY_CONVERSION_FACTOR
 from syslog_converter import FACILITY_KEYWORDS
 from syslog_converter import SEVERITY_KEYWORDS
+from typing import Optional
 
 
 def get_parser(version: str) -> argparse.ArgumentParser:
@@ -54,7 +55,7 @@ def get_parser(version: str) -> argparse.ArgumentParser:
     return parser
 
 
-def extract_values(priority: int, logger: logging = None) -> dict:
+def extract_values(priority: int, logger: Optional[logging.Logger] = None) -> dict:
     """
     Extract the facility and severity value from a provided priority.
     Also adds the facility and severity name.
