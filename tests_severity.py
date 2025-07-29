@@ -7,8 +7,8 @@ Perform unittests related to syslog severities.
 
 import unittest
 
-from syslog_converter import get_severity_value
-from syslog_converter import get_severity_keyword
+from syslog_converter.severity import get_severity_value
+from syslog_converter.severity import get_severity_keyword
 
 
 class SeverityTests(unittest.TestCase):
@@ -21,20 +21,20 @@ class SeverityTests(unittest.TestCase):
         Test the get_severity_value function with various priority values.
         """
         self.assertEqual(get_severity_value(0), 0)
-        self.assertEqual(get_severity_value(7), 0)
-        self.assertEqual(get_severity_value(8), 1)
-        self.assertEqual(get_severity_value(15), 1)
-        self.assertEqual(get_severity_value(16), 2)
-        self.assertEqual(get_severity_value(23), 2)
-        self.assertEqual(get_severity_value(24), 3)
-        self.assertEqual(get_severity_value(31), 3)
-        self.assertEqual(get_severity_value(32), 4)
-        self.assertEqual(get_severity_value(39), 4)
-        self.assertEqual(get_severity_value(40), 5)
-        self.assertEqual(get_severity_value(47), 5)
-        self.assertEqual(get_severity_value(48), 6)
-        self.assertEqual(get_severity_value(55), 6)
-        self.assertEqual(get_severity_value(56), 7)
+        self.assertEqual(get_severity_value(7), 7)
+        self.assertEqual(get_severity_value(8), 0)
+        self.assertEqual(get_severity_value(15), 7)
+        self.assertEqual(get_severity_value(16), 0)
+        self.assertEqual(get_severity_value(23), 7)
+        self.assertEqual(get_severity_value(24), 0)
+        self.assertEqual(get_severity_value(31), 7)
+        self.assertEqual(get_severity_value(32), 0)
+        self.assertEqual(get_severity_value(39), 7)
+        self.assertEqual(get_severity_value(40), 0)
+        self.assertEqual(get_severity_value(47), 7)
+        self.assertEqual(get_severity_value(48), 0)
+        self.assertEqual(get_severity_value(55), 7)
+        self.assertEqual(get_severity_value(56), 0)
         self.assertEqual(get_severity_value(63), 7)
         self.assertEqual(get_severity_value(64), 0)
         self.assertEqual(get_severity_value(191), 7)
@@ -94,3 +94,7 @@ class SeverityTests(unittest.TestCase):
             get_severity_keyword(3.14)
         with self.assertRaises(TypeError):
             get_severity_keyword(None)
+
+
+if __name__ == "__main__":
+    unittest.main()

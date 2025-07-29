@@ -7,9 +7,8 @@ Perform unittests related to syslog facilities.
 
 import unittest
 
-from syslog_converter import get_facility_value
-from syslog_converter import get_facility_keyword
-
+from syslog_converter.facility import get_facility_value
+from syslog_converter.facility import get_facility_keyword
 
 class FacilityTests(unittest.TestCase):
     """
@@ -112,3 +111,7 @@ class FacilityTests(unittest.TestCase):
             get_facility_keyword(3.14)
         with self.assertRaises(TypeError):
             get_facility_keyword(None)
+
+
+if __name__ == "__main__":
+    unittest.main()
