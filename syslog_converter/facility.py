@@ -51,5 +51,5 @@ def get_facility_keyword(facility: int) -> str:
 
     try:
         return FACILITY_KEYWORDS[facility]
-    except KeyError:
-        raise KeyError("Facility must be between 0 and 23 inclusive.")
+    except KeyError as exc:
+        raise KeyError("Facility must be between 0 and 23 inclusive.") from exc

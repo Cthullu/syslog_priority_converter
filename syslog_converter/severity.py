@@ -51,5 +51,5 @@ def get_severity_keyword(severity: int) -> str:
 
     try:
         return SEVERITY_KEYWORDS[severity]
-    except KeyError:
-        raise KeyError("Severity must be between 0 and 7 inclusive.")
+    except KeyError as exc:
+        raise KeyError("Severity must be between 0 and 7 inclusive.") from exc
