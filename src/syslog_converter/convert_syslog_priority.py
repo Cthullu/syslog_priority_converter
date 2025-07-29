@@ -12,8 +12,11 @@ __status__: str = "Production"
 
 import logging
 import argparse
-import constant as const
+
 from sys import exit as sys_exit
+from syslog_converter import PRIORITY_CONVERSION_FACTOR
+from syslog_converter import FACILITY_KEYWORDS
+from syslog_converter import SEVERITY_KEYWORDS
 
 
 def get_parser(version: str) -> argparse.ArgumentParser:
@@ -61,17 +64,17 @@ def extract_values(priority: int, logger: logging = None) -> dict:
     ret_val = {}
 
     logger.debug("Perform integer division for '%s'.", priority)
-    ret_val["facility_value"] = priority // const.PRIORITY_CONVERSION_FACTOR
+    ret_val["facility_value"] = priority // PRIORITY_CONVERSION_FACTOR
 
     logger.debug("Get facility keyword for value '%s'.",ret_val["facility_value"])
-    ret_val["failicty_keyword"] = const.FACILITY_KEYWORDS[ret_val["facility_value"]]
+    ret_val["failicty_keyword"] = FACILITY_KEYWORDS[ret_val["facility_value"]]
 
     logger.debug("Get severity level from provided priority '%s'.", priority)
     ret_val["severity_value"] = priority - (ret_val["facility_value"]
-                                            * const.PRIORITY_CONVERSION_FACTOR)
+                                            * PRIORITY_CONVERSION_FACTOR)
 
     logger.debug("Get severity keyword for value '%s'.",ret_val["severity_value"])
-    ret_val["severity_keyword"] = const.SEVERITY_KEYWORDS[ret_val["severity_value"]]
+    ret_val["severity_keyword"] = SEVERITY_KEYWORDS[ret_val["severity_value"]]
 
     return ret_val
 
