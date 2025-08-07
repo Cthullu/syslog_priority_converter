@@ -59,14 +59,14 @@ bool is_valid_priority(int priority) {
 }
 
 
-int convert_priority_to_severity(int priority) {
-    // Convert syslog priority to a severity level
+int convert_priority_to_facility(int priority) {
+    // Convert syslog priority to a facility level
     return priority / PRIORITY_CONVERSION_FACTOR;
 }
 
 
-int convert_priority_to_facility(int priority) {
-    // Convert syslog priority to a facility level
+int convert_priority_to_severity(int priority) {
+    // Convert syslog priority to a severity level
     return priority % PRIORITY_CONVERSION_FACTOR;
 }
 
