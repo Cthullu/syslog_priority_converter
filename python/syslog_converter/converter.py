@@ -134,7 +134,7 @@ class Converter:
             KeyError: If the facility value is not recognized.
         """
         try:
-            return self.__FACILITY_KEYWORDS[self._facility]
+            return self.__FACILITY_KEYWORDS[self.facility]
         except KeyError as exc:
             raise KeyError("Facility must be between 0 and 23 inclusive.") from exc
 
@@ -169,6 +169,6 @@ class Converter:
             KeyError: If the severity value is not recognized.
         """
         try:
-            return self.__SEVERITY_KEYWORDS[self._severity]
+            return self.__SEVERITY_KEYWORDS[self.severity]
         except KeyError as exc:
             raise KeyError("Severity must be between 0 and 7 inclusive.") from exc

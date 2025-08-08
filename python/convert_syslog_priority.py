@@ -14,7 +14,7 @@ __status__: str = "Production"
 from sys import exit as sys_exit
 
 # Local imports
-from syslog_converter import converter
+from syslog_converter.converter import Converter
 from syslog_converter import utils
 
 
@@ -38,7 +38,7 @@ def main() -> int:
 
     logger.debug("Creating converter instance with priority '%d'.", cli_args.priority)
     try:
-        priority_converter = converter.Converter(cli_args.priority)
+        priority_converter = Converter(cli_args.priority)
     except ValueError as e:
         logger.error(
             "Received value error while creating converter object with priority '%d': %s",
@@ -53,8 +53,8 @@ def main() -> int:
     severity_level = priority_converter.severity_level
 
     logger.debug("Printing values.")
-    print(f"Syslog severity: {severity} {facility_level}")
-    print(f"Syslog facility: {facility} {severity_level}")
+    print(f"Syslog severity: {severity} {severity_level}")
+    print(f"Syslog facility: {facility} {facility_level}")
 
     logger.info("Syslog priority conversion completed successfully.")
     logger.debug("Exiting with code 0.")
