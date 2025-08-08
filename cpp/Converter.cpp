@@ -1,6 +1,9 @@
 #include "Converter.h"
 #include <iostream>
 
+using namespace std;
+
+
 // Constructor that takes a syslog priority and initializes the class
 Converter::Converter() {
     priority = -1;
@@ -40,7 +43,7 @@ int Converter::get_facility() { return facility; }
 int Converter::get_severity() { return severity; }
 
 
-std::string Converter::get_severity_level() {
+string Converter::get_severity_level() {
     // Get the severity level as string
     auto it = FACILITY_LEVEL_MAP.find(facility);
     if (it != FACILITY_LEVEL_MAP.end()) {
@@ -50,7 +53,7 @@ std::string Converter::get_severity_level() {
 }
 
 
-std::string Converter::get_facility_level() {
+string Converter::get_facility_level() {
     // Get the severity level as a string
     auto it = SEVERITY_LEVEL_MAP.find(severity);
     if (it != SEVERITY_LEVEL_MAP.end()) {

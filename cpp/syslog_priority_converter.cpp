@@ -2,11 +2,13 @@
 #include "Converter.h"
 
 
+using namespace std;
+
 void print_usage() {
     // Print the usage instructions for the program
-    std::cout << "Usage: syslog_priority_converter <syslog_priority> | --help" << std::endl;
-    std::cout << "Converts syslog priority to a human-readable format." << std::endl;
-    std::cout << "Example: syslog_priority_converter 3" << std::endl;
+    cout << "Usage: syslog_priority_converter <syslog_priority> | --help" << endl;
+    cout << "Converts syslog priority to a human-readable format." << endl;
+    cout << "Example: syslog_priority_converter 3" << endl;
 }
 
 
@@ -19,7 +21,7 @@ int main(int argc, char *argv[]) {
     }
 
     // Check if the argument is "--help"
-    if (std::string(argv[1]) == "--help") {
+    if (string(argv[1]) == "--help") {
         print_usage();
         return 0;
     }
@@ -27,9 +29,9 @@ int main(int argc, char *argv[]) {
     // Convert the argument to an integer
     int syslog_priority;
     try {
-        syslog_priority = std::stoi(argv[1]);
-    } catch (const std::invalid_argument& e) {
-        std::cerr << "Syslog priority must be an integer, not: " << argv[1] << std::endl;
+        syslog_priority = stoi(argv[1]);
+    } catch (const invalid_argument& e) {
+        cerr << "Syslog priority must be an integer, not: " << argv[1] << endl;
         return 1;
     }
 
@@ -39,24 +41,24 @@ int main(int argc, char *argv[]) {
     // Try to pass the priority to the converter
     try {
         converter.set_priority(syslog_priority);
-    } catch (const std::out_of_range& e) {
-        std::cerr << e.what() << std::endl;
+    } catch (const out_of_range& e) {
+        cerr << e.what() << endl;
         return 1;
-    } catch (std::string& e) {
-        std::cerr << e << std::endl;
+    } catch (string& e) {
+        cerr << e << endl;
         return 1;
     }
 
     // Get the facility and severity levels from the converter
     int facility = converter.get_facility();
     int severity = converter.get_severity();
-    std::string severity_level = converter.get_severity_level();
-    std::string facility_level = converter.get_facility_level();
+    string severity_level = converter.get_severity_level();
+    string facility_level = converter.get_facility_level();
 
     // Print the results
-    std::cout << "Syslog Priority: " << syslog_priority << std::endl;
-    std::cout << "Severity Level: " << severity << " " << severity_level << std::endl;
-    std::cout << "Facility Level: " << facility << " " << facility_level << std::endl;
+    cout << "Syslog Priority: " << syslog_priority << endl;
+    cout << "Severity Level: " << severity << " " << severity_level << endl;
+    cout << "Facility Level: " << facility << " " << facility_level << endl;
 
     // Exit the program successfully
     return 0;

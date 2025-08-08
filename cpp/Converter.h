@@ -3,6 +3,8 @@
 #ifndef CONVERTER_H
 #define CONVERTER_H
 
+using namespace std;
+
 class Converter {
     public:
         Converter();
@@ -11,15 +13,15 @@ class Converter {
         int get_priority();
         int get_facility();
         int get_severity();
-        std::string get_severity_level();
-        std::string get_facility_level();
+        string get_severity_level();
+        string get_facility_level();
 
     private:
         const int PRIORITY_CONVERSION_FACTOR = 8;
         const int MIN_PRIORITY = 0; // Minimum syslog priority value
         const int MAX_PRIORITY = 191; // Maximum syslog priority value
 
-        const std::unordered_map<int, std::string> SEVERITY_LEVEL_MAP = {
+        const unordered_map<int, string> SEVERITY_LEVEL_MAP = {
             {0, "Emergency"},
             {1, "Alert"},
             {2, "Critical"},
@@ -30,7 +32,7 @@ class Converter {
             {7, "Debug"}
         };
 
-        const std::unordered_map<int, std::string> FACILITY_LEVEL_MAP = {
+        const unordered_map<int, string> FACILITY_LEVEL_MAP = {
             {0, "Kernel messages"},
             {1, "User-level messages"},
             {2, "Mail system"},
