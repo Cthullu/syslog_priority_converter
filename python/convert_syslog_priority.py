@@ -36,15 +36,18 @@ def main() -> int:
     if cli_args.loglevel != "INFO":
         logger = utils.setup_logger(cli_args.loglevel)
 
-    logger.debug("Creating converter instance with priority '%d'.", cli_args.priority)
+    logger.debug("Creating converter instance.")
+    priority_converter = Converter()
+
+    logger.debug("Setting priority value in converter object.")
     try:
-        priority_converter = Converter(cli_args.priority)
+        priority_converter.priority = cli_args.priority
     except ValueError as e:
         logger.error(
-            "Received value error while creating converter object with priority '%d': %s",
-            cli_args.priority, e
-        )
+        "Received value error while creating converter object with priority '%d': %s",
+        cli_args.priority, e
         return 1
+    )
 
     logger.debug("Getting facility and severity values from converter object.")
     facility = priority_converter.facility
