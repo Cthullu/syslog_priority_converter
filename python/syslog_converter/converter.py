@@ -2,15 +2,12 @@
 # -*- coding: utf-8 -*-
 
 class Converter:
-    def __init__(self, priority: int):
+    def __init__(self) -> None:
         """
         Initialize a Converter with a priority.
 
         Args:
-            priority (int): The priority to convert.
-
-        Raises:
-            ValueError: If the priority is not between 0 and 191 inclusive.
+            None
         """
         self.__PRIORITY_CONVERSION_FACTOR = 8
 
@@ -52,7 +49,9 @@ class Converter:
             7: "debug",
         }
 
-        self.priority = priority
+        self._priority = None
+        self._facility = None
+        self._severity = None
 
 
     def __str__(self) -> str:
@@ -96,8 +95,12 @@ class Converter:
             None
 
         Raises:
+            TypeError: If the priority is not an integer.
             ValueError: If the priority is not between 0 and 191 inclusive.
         """
+        if not isinstance(priority, int):
+            raise TypeError("Priority must be an integer.")
+
         if priority < 0 or priority > 191:
             raise ValueError("Priority must be between 0 and 191 inclusive.")
 
@@ -115,8 +118,11 @@ class Converter:
         Returns:
             int: The nummeric facility level.
         """
-        self._facility = self._priority // self.__PRIORITY_CONVERSION_FACTOR
-        return self._facility
+        try:
+            self._facility = self._priority // self.__PRIORITY_CONVERSION_FACTOR
+            return self._facility
+        except TypeError as exc:
+            raise TypeError("Converter not yet ready. Set a priority first.") from exc
 
 
     @property
@@ -150,8 +156,11 @@ class Converter:
         Returns:
             int: The nummeric severity level.
         """
-        self._severity = self._priority % self.__PRIORITY_CONVERSION_FACTOR
-        return self._severity
+        try:
+            self._severity = self._priority % self.__PRIORITY_CONVERSION_FACTOR
+            return self._severity
+        except TypeError as exc:
+            raise TypeError("Converter not yet ready. Set a priority first.") from exc
 
 
     @property
