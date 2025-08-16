@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+
 class Converter:
     def __init__(self) -> None:
         """
@@ -53,7 +54,6 @@ class Converter:
         self._facility = None
         self._severity = None
 
-
     def __str__(self) -> str:
         """
         Returns a string representation of the Converter.
@@ -68,7 +68,6 @@ class Converter:
         """
         return f"{self.priority}"
 
-
     @property
     def priority(self) -> int:
         """
@@ -81,7 +80,6 @@ class Converter:
             int: The priority value.
         """
         return self._priority
-
 
     @priority.setter
     def priority(self, priority: int) -> None:
@@ -106,7 +104,6 @@ class Converter:
 
         self._priority = priority
 
-
     @property
     def facility(self) -> int:
         """
@@ -123,7 +120,6 @@ class Converter:
             return self._facility
         except TypeError as exc:
             raise TypeError("Converter not yet ready. Set a priority first.") from exc
-
 
     @property
     def facility_level(self) -> str:
@@ -144,7 +140,6 @@ class Converter:
         except KeyError as exc:
             raise KeyError("Facility must be between 0 and 23 inclusive.") from exc
 
-
     @property
     def severity(self) -> int:
         """
@@ -161,7 +156,6 @@ class Converter:
             return self._severity
         except TypeError as exc:
             raise TypeError("Converter not yet ready. Set a priority first.") from exc
-
 
     @property
     def severity_level(self) -> str:

@@ -39,7 +39,6 @@ class SeverityTests(unittest.TestCase):
         self.assertEqual(get_severity_value(64), 0)
         self.assertEqual(get_severity_value(191), 7)
 
-
     def test_get_severity_value_invalid_value(self):
         """
         Test the get_severity_value function with invalid priority values.
@@ -49,7 +48,6 @@ class SeverityTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             get_severity_value(192)
 
-
     def test_get_severity_value_invalid_type(self):
         """
         Test the get_severity_value function with invalid types.
@@ -58,7 +56,6 @@ class SeverityTests(unittest.TestCase):
             get_severity_value("invalid")
         with self.assertRaises(TypeError):
             get_severity_value(3.14)
-
 
     def test_get_severity_keyword_valid(self):
         """
@@ -73,7 +70,6 @@ class SeverityTests(unittest.TestCase):
         self.assertEqual(get_severity_keyword(6), "info")
         self.assertEqual(get_severity_keyword(7), "debug")
 
-
     def test_get_severity_keyword_invalid_value(self):
         """
         Test the get_severity_keyword function with invalid severity values.
@@ -82,7 +78,6 @@ class SeverityTests(unittest.TestCase):
             get_severity_keyword(-1)
         with self.assertRaises(KeyError):
             get_severity_keyword(8)
-
 
     def test_get_severity_keyword_invalid_type(self):
         """

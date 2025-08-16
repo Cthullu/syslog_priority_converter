@@ -10,6 +10,7 @@ import unittest
 from syslog_converter.facility import get_facility_value
 from syslog_converter.facility import get_facility_keyword
 
+
 class FacilityTests(unittest.TestCase):
     """
     Tests for syslog facility operations.
@@ -38,7 +39,6 @@ class FacilityTests(unittest.TestCase):
         self.assertEqual(get_facility_value(64), 8)
         self.assertEqual(get_facility_value(191), 23)
 
-
     def test_get_facility_value_invalid_value(self):
         """
         Test the get_facility_value function with invalid priority values.
@@ -47,7 +47,6 @@ class FacilityTests(unittest.TestCase):
             get_facility_value(-1)
         with self.assertRaises(ValueError):
             get_facility_value(192)
-
 
     def test_get_facility_value_invalid_type(self):
         """
@@ -59,7 +58,6 @@ class FacilityTests(unittest.TestCase):
             get_facility_value(3.14)
         with self.assertRaises(TypeError):
             get_facility_value(None)
-
 
     def test_get_facility_keyword_valid(self):
         """
@@ -90,7 +88,6 @@ class FacilityTests(unittest.TestCase):
         self.assertEqual(get_facility_keyword(22), "local6")
         self.assertEqual(get_facility_keyword(23), "local7")
 
-
     def test_get_facility_keyword_invalid_value(self):
         """
         Test the get_facility_keyword function with invalid facility values.
@@ -99,7 +96,6 @@ class FacilityTests(unittest.TestCase):
             get_facility_keyword(-1)
         with self.assertRaises(KeyError):
             get_facility_keyword(24)
-
 
     def test_get_facility_keyword_invalid_type(self):
         """

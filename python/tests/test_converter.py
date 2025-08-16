@@ -10,14 +10,16 @@ import unittest
 from os import path as os_path
 from sys import path as sys_path
 from sys import argv as sys_argv
+
 dir_name = os_path.dirname(sys_argv[0])
 file_path = os_path.abspath(dir_name)
-sys_path.append(f'{file_path}/../')
+sys_path.append(f"{file_path}/../")
 
 try:
     from syslog_converter.converter import Converter
 except ImportError:
     raise ImportError("The syslog_converter package is required for these tests.")
+
 
 class ConverterTests(unittest.TestCase):
     """
@@ -181,7 +183,7 @@ class ConverterTests(unittest.TestCase):
             4: "warning",
             5: "notice",
             6: "info",
-            7: "debug"
+            7: "debug",
         }
 
     def test_converter_initialization(self):
@@ -261,7 +263,6 @@ class ConverterTests(unittest.TestCase):
         with self.assertRaises(TypeError):
             self.empty_converter.severity
 
-
         for priority, severity in self.severities_test_values.items():
             self.converter.priority = priority
             self.assertEqual(self.converter.severity, severity)
@@ -273,6 +274,7 @@ class ConverterTests(unittest.TestCase):
         for priority, severity in self.severity_keywords.items():
             self.converter.priority = priority
             self.assertEqual(self.converter.severity_level, severity)
+
 
 if __name__ == "__main__":
     # Perform tests if called directly

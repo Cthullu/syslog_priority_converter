@@ -10,12 +10,12 @@ import logging
 
 
 LOGLEVELS = {
-    'CRITICAL': logging.CRITICAL,
-    'ERROR': logging.ERROR,
-    'WARNING': logging.WARNING,
-    'INFO': logging.INFO,
-    'DEBUG': logging.DEBUG,
-    'NOTSET': logging.NOTSET
+    "CRITICAL": logging.CRITICAL,
+    "ERROR": logging.ERROR,
+    "WARNING": logging.WARNING,
+    "INFO": logging.INFO,
+    "DEBUG": logging.DEBUG,
+    "NOTSET": logging.NOTSET,
 }
 
 
@@ -30,32 +30,31 @@ def get_cli_args(version: str) -> argparse.Namespace:
         argparse.Namespace: Parsed command-line arguments.
     """
     parser = argparse.ArgumentParser(
-        prog = "convert_syslog_priority",
+        prog="convert_syslog_priority",
         description="Convert syslog priority value to facility and severity level.",
     )
 
     parser.add_argument(
-        "-l", "--loglevel",
-        choices = LOGLEVELS,
-        default = "WARNING",
-        dest = "loglevel",
-        help = "Select logging level.",
-        metavar = "<loglevel>",
-        required = False,
-        type = str.upper,
+        "-l",
+        "--loglevel",
+        choices=LOGLEVELS,
+        default="WARNING",
+        dest="loglevel",
+        help="Select logging level.",
+        metavar="<loglevel>",
+        required=False,
+        type=str.upper,
     )
 
     parser.add_argument(
-        "-v", "--version",
-        action = "version",
-        version = f'%(prog)s {version}'
+        "-v", "--version", action="version", version=f"%(prog)s {version}"
     )
 
     parser.add_argument(
-        dest = "priority",
-        type = int,
-        metavar = "<priority>",
-        help = "Priority to convert into facility and severity level.",
+        dest="priority",
+        type=int,
+        metavar="<priority>",
+        help="Priority to convert into facility and severity level.",
     )
 
     return parser.parse_args()
@@ -77,7 +76,9 @@ def setup_logger(loglevel: int = LOGLEVELS["WARNING"]) -> logging.Logger:
     # Create a console handler with the specified log level
     console_handler = logging.StreamHandler()
     console_handler.setLevel(loglevel)
-    formatter = logging.Formatter('%(asctime)s - %(levelname) -8s - %(message)s', '%Y-%m-%d %H:%M:%S')
+    formatter = logging.Formatter(
+        "%(asctime)s - %(levelname) -8s - %(message)s", "%Y-%m-%d %H:%M:%S"
+    )
     console_handler.setFormatter(formatter)
     logger.addHandler(console_handler)
 
