@@ -61,7 +61,6 @@ def get_cli_args(version: str) -> argparse.ArgumentParser:
 
     return parser.parse_args()
 
-####################################################################################################
 
 def setup_logger(loglevel: Optional[int] = LOGLEVELS["WARNING"]) -> logging.Logger:
     """
