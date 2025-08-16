@@ -7,7 +7,6 @@ Various utility functions
 
 import argparse
 import logging
-from typing import Optional
 
 
 LOGLEVELS = {
@@ -20,7 +19,7 @@ LOGLEVELS = {
 }
 
 
-def get_cli_args(version: str) -> argparse.ArgumentParser:
+def get_cli_args(version: str) -> argparse.Namespace:
     """
     Returns an ArgumentParser for the convert_syslog_priority.py script.
 
@@ -28,7 +27,7 @@ def get_cli_args(version: str) -> argparse.ArgumentParser:
         version:
 
     Returns:
-        argparse.ArgumentParser: Configured argument parser.
+        argparse.Namespace: Parsed command-line arguments.
     """
     parser = argparse.ArgumentParser(
         prog = "convert_syslog_priority",
@@ -62,12 +61,12 @@ def get_cli_args(version: str) -> argparse.ArgumentParser:
     return parser.parse_args()
 
 
-def setup_logger(loglevel: Optional[int] = LOGLEVELS["WARNING"]) -> logging.Logger:
+def setup_logger(loglevel: int = LOGLEVELS["WARNING"]) -> logging.Logger:
     """
     Set up the logging configuration for the script.
 
     Args:
-        loglevel (Optional[int]): The logging level to set. Defaults to WARNING.
+        loglevel (int): The logging level to set. Defaults to WARNING.
 
     Returns:
         logging.Logger: Configured logger instance.
