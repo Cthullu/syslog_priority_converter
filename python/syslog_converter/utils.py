@@ -60,22 +60,32 @@ def get_cli_args(version: str) -> argparse.Namespace:
     return parser.parse_args()
 
 
-def setup_logger(loglevel: int = LOGLEVELS["WARNING"]) -> logging.Logger:
+def setup_logger(loglevel: str = "WARNING") -> logging.Logger:
     """
     Set up the logging configuration for the script.
 
     Args:
-        loglevel (int): The logging level to set. Defaults to WARNING.
+        loglevel (str): The logging level to set. Defaults to WARNING.
 
     Returns:
         logging.Logger: Configured logger instance.
+
+    Raises:
+        TypeError: If loglevel is not a string.
+        ValueError: If loglevel is not a valid logging level.
     """
+    if not isinstance(loglevel, str):
+        raise TypeError("loglevel must be a string")
+
+    if loglevel not in LOGLEVELS:
+        raise ValueError(f"Invalid loglevel: {loglevel}")
+
     logger = logging.getLogger()
-    logger.setLevel(loglevel)
+    logger.setLevel(LOGLEVELS[loglevel])
 
     # Create a console handler with the specified log level
     console_handler = logging.StreamHandler()
-    console_handler.setLevel(loglevel)
+    console_handler.setLevel(LOGLEVELS[loglevel])
     formatter = logging.Formatter(
         "%(asctime)s - %(levelname) -8s - %(message)s", "%Y-%m-%d %H:%M:%S"
     )
