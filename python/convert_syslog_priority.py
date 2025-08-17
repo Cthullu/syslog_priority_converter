@@ -57,8 +57,8 @@ def main() -> int:
     severity_level = priority_converter.severity_level
 
     logger.debug("Printing values.")
-    print(f"Syslog severity: {severity} {severity_level}")
     print(f"Syslog facility: {facility} {facility_level}")
+    print(f"Syslog severity: {severity} {severity_level}")
 
     logger.info("Syslog priority conversion completed successfully.")
     logger.debug("Exiting with code 0.")

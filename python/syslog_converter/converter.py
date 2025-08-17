@@ -7,6 +7,7 @@ Converter class to store and convert given priority.
 
 from typing import Final
 
+
 class Converter:
     """
     Converter class to store and convert given priority.

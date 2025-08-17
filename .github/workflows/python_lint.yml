@@ -21,8 +21,18 @@ jobs:
           pip install pylint
 
 
-      - name: Analyse the code with pylint
+      - name: Analyse the python module code
         run: |
-          for python_file in $(git ls-files '*.py'); do
-            pylint "${python_file}";
+          for python_file in $(git ls-files -- '*.py' ':!:*.test.py');
+            do
+            echo "Analysing ${python_file} with pylint";
+            pylint --rcfile pipeline_config/.pylintrc "${python_file}";
+            done
+
+      - name: Analyse the python unit test code with pylint
+        run: |
+          for python_file in $(git ls-files -- '*.test.py');
+            do
+            echo "Analysing ${python_file} with pylint";
+            pylint --rcfile pipeline_config/.pylintrc_tests "${python_file}";
             done
