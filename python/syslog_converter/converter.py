@@ -1,8 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+"""
+Converter class to store and convert given priority.
+"""
+
+from typing import Final
 
 class Converter:
+    """
+    Converter class to store and convert given priority.
+    """
+
     def __init__(self) -> None:
         """
         Initialize a Converter with a priority.
@@ -10,9 +19,9 @@ class Converter:
         Args:
             None
         """
-        self.__PRIORITY_CONVERSION_FACTOR = 8
+        self.__priority_conversion_factor: Final[int] = 8
 
-        self.__FACILITY_KEYWORDS = {
+        self.__facility_keywords: Final[dict[int, str]] = {
             0: "Kernel messages",
             1: "User-level messages",
             2: "Mail system",
@@ -39,7 +48,7 @@ class Converter:
             23: "Local use 7 (local7)",
         }
 
-        self.__SEVERITY_KEYWORDS = {
+        self.__severity_keywords: Final[dict[int, str]] = {
             0: "emerg",
             1: "alert",
             2: "crit",
@@ -116,7 +125,7 @@ class Converter:
             int: The nummeric facility level.
         """
         try:
-            self._facility = self._priority // self.__PRIORITY_CONVERSION_FACTOR
+            self._facility = self._priority // self.__priority_conversion_factor
             return self._facility
         except TypeError as exc:
             raise TypeError("Converter not yet ready. Set a priority first.") from exc
@@ -136,7 +145,7 @@ class Converter:
             KeyError: If the facility value is not recognized.
         """
         try:
-            return self.__FACILITY_KEYWORDS[self.facility]
+            return self.__facility_keywords[self.facility]
         except KeyError as exc:
             raise KeyError("Facility must be between 0 and 23 inclusive.") from exc
 
@@ -152,7 +161,7 @@ class Converter:
             int: The nummeric severity level.
         """
         try:
-            self._severity = self._priority % self.__PRIORITY_CONVERSION_FACTOR
+            self._severity = self._priority % self.__priority_conversion_factor
             return self._severity
         except TypeError as exc:
             raise TypeError("Converter not yet ready. Set a priority first.") from exc
@@ -172,6 +181,6 @@ class Converter:
             KeyError: If the severity value is not recognized.
         """
         try:
-            return self.__SEVERITY_KEYWORDS[self.severity]
+            return self.__severity_keywords[self.severity]
         except KeyError as exc:
             raise KeyError("Severity must be between 0 and 7 inclusive.") from exc
