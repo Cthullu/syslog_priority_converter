@@ -11,16 +11,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ["3.9", "3.10", "3.11", "3.12"]
     steps:
       - uses: actions/checkout@master
-
-      - name: Setup Python ${{ matrix.python-version }}
-        uses: actions/setup-python@master
-        with:
-          python-version: ${{ matrix.python-version }}
 
 
       - name: Install dependencies
@@ -31,4 +23,6 @@ jobs:
 
       - name: Analyse the code with pylint
         run: |
-          pylint $(git ls-files '*.py')
+          for python_file in $(git ls-files '*.py'); do
+            pylint "${python_file}";
+            done
