@@ -24,6 +24,9 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
 
-      - name: Run all defined unittests
+      - name: Run all defined unittests for python
         run: |
-          python -m unittest discover --verbose
+          python -m unittest discover \
+            --start-directory ./python/tests \
+            --pattern "*.test.py" \
+            --top-level-directory python
