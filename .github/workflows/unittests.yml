@@ -28,5 +28,5 @@ jobs:
         run: |
           python -m unittest discover \
             --start-directory ./python/tests \
-            --pattern "test_*.py" \
+            --pattern "*.test.py" \
             --top-level-directory python
