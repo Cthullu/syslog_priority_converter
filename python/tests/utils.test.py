@@ -2,11 +2,9 @@
 # -*- coding: utf-8 -*-
 
 """
-Unit tests for the converter class
+Unit tests for the utils module.
 """
 
-from contextlib import AbstractContextManager
-from typing import Any
 import unittest
 
 from os import path as os_path
@@ -19,11 +17,16 @@ sys_path.append(f"{file_path}/../")
 
 try:
     from syslog_converter.utils import setup_logger
-except ImportError:
-    raise ImportError("The syslog_converter package is required for these tests.")
+except ImportError as exc:
+    raise ImportError(
+        "The syslog_converter package is required for these tests."
+    ) from exc
 
 
 class TestSetupLogger(unittest.TestCase):
+    """
+    Unit tests for the setup_logger function.
+    """
 
     def test_setup_logger_default(self):
         """

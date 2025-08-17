@@ -17,8 +17,10 @@ sys_path.append(f"{file_path}/../")
 
 try:
     from syslog_converter.converter import Converter
-except ImportError:
-    raise ImportError("The syslog_converter package is required for these tests.")
+except ImportError as exc:
+    raise ImportError(
+        "The syslog_converter package is required for these tests."
+    ) from exc
 
 
 class ConverterTests(unittest.TestCase):
@@ -191,7 +193,9 @@ class ConverterTests(unittest.TestCase):
         Test the initialization of the Converter class.
         """
         self.assertIsInstance(self.converter, Converter)
+        self.assertIsInstance(self.empty_converter, Converter)
 
+        # Check if the initial values are set to None
         self.assertEqual(self.converter._priority, None)
         self.assertEqual(self.converter._facility, None)
         self.assertEqual(self.converter._severity, None)
@@ -201,18 +205,18 @@ class ConverterTests(unittest.TestCase):
         Test the priority setter of the Converter class.
         """
         self.converter.priority = 13
-        self.assertEqual(self.converter._priority, 13)
+        self.assertEqual(self.converter.priority, 13)
 
         # Re-setting the value should be able without an error
         self.converter.priority = 14
-        self.assertEqual(self.converter._priority, 14)
+        self.assertEqual(self.converter.priority, 14)
 
         # Test if setting the min and max allowed values works
         self.converter.priority = 0
-        self.assertEqual(self.converter._priority, 0)
+        self.assertEqual(self.converter.priority, 0)
 
         self.converter.priority = 191
-        self.assertEqual(self.converter._priority, 191)
+        self.assertEqual(self.converter.priority, 191)
 
         # Setting a value outside the boundries should raise an `ValueError`
         with self.assertRaises(ValueError):
@@ -241,7 +245,7 @@ class ConverterTests(unittest.TestCase):
         """
         # Check that we get an `TypeError` for an instance without set priority
         with self.assertRaises(TypeError):
-            self.empty_converter.facility
+            _test = self.empty_converter.facility
 
         for priority, facility in self.facilities_test_values.items():
             self.converter.priority = priority
@@ -261,7 +265,7 @@ class ConverterTests(unittest.TestCase):
         """
         # Check if we get an `TypeError` for an instance without set priority
         with self.assertRaises(TypeError):
-            self.empty_converter.severity
+            _test = self.empty_converter.severity
 
         for priority, severity in self.severities_test_values.items():
             self.converter.priority = priority
